@@ -24,4 +24,29 @@ module.exports = function(app, db) {
       }
     });
   });
+
+  app.put('/notes/:id', (req, res) => {
+    const id = req.params.id;
+    const details = {'_id': new ObjectId(id) };
+    const note = { body: req.body.body, title: req.body.title };
+    db.db().collection('notes').update(details, note, (err, item) => {
+      if(err) {
+        res.send({ 'error': 'An error has occured:' + err });
+      } else {
+        res.send(item);
+      }
+    });
+  });
+
+  app.delete('/notes/:id', (req, res) => {
+    const id = req.params.id;
+    const details = {'_id': new ObjectId(id) };
+    db.db().collection('notes').remove(details, (err, item) => {
+      if(err) {
+        res.send({ 'error': 'An error has occured:' + err });
+      } else {
+        res.send('Note ' + id + ' deleted!');
+      }
+    });
+  });
 }
